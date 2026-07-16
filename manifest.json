@@ -1,0 +1,34 @@
+{
+  "name": "전국 공공도서관 지도",
+  "short_name": "도서관 지도",
+  "description": "전국 공공도서관·작은도서관 지도 — 지역별 조회, 검색, 운영시간·좌석·장서 정보",
+  "lang": "ko",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F1F8F0",
+  "theme_color": "#3F6B4F",
+  "categories": ["education", "lifestyle", "books"],
+  "icons": [
+    {
+      "src": "assets/icons/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/app-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+Thumbs.db
+Desktop.ini
+
+.claude/settings.local.json
