@@ -288,6 +288,16 @@ body {
 }
 .card-locate:hover { transform: translateY(-2px); }
 
+/* ---------- 더 보기 ---------- */
+.load-more-btn {
+  display: block; width: 100%; margin-top: 18px; padding: 13px;
+  font-family: inherit; font-size: 0.95rem; font-weight: 700;
+  border: none; border-radius: 999px; cursor: pointer;
+  background: var(--grad-primary); color: white;
+  transition: transform 0.2s;
+}
+.load-more-btn:hover { transform: translateY(-2px); }
+
 /* ---------- 빈 상태 ---------- */
 .empty-state { text-align: center; padding: 60px 0; color: var(--brown); }
 
