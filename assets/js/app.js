@@ -267,7 +267,7 @@
     LIBRARIES.forEach(function (f) { presentK[f.kind] = true; });
     var kPills = ['<button class="pill active" data-kind="">전체</button>'];
     KIND_ORDER.forEach(function (k) {
-      if (presentK[k]) kPills.push('<button class="pill" data-kind="' + k + '">' + KIND_EMOJI[k] + ' ' + k + '</button>');
+      if (presentK[k]) kPills.push('<button class="pill" data-kind="' + k + '">' + k + '</button>');
     });
     kindRow.insertAdjacentHTML('beforeend', kPills.join(''));
   }
@@ -355,7 +355,7 @@
   filterToggleBtn.addEventListener('click', function () {
     var willOpen = filterGroups.hidden;
     filterGroups.hidden = !willOpen;
-    filterToggleBtn.textContent = willOpen ? '🔼' : '🔽';
+    filterToggleBtn.textContent = willOpen ? '▲' : '▼';
     var label = willOpen ? '필터 닫기' : '필터 열기';
     filterToggleBtn.title = label;
     filterToggleBtn.setAttribute('aria-label', label);
