@@ -5,12 +5,6 @@
   var LIBRARIES = window.LIBRARIES || [];
   var DATA_META = window.DATA_META || {};
 
-  var KIND_EMOJI = {
-    '공공도서관': '📚',
-    '작은도서관': '🧸',
-    '어린이도서관': '🎈',
-    '기타': '📖'
-  };
   var KIND_COLOR = {
     '공공도서관': '#3F6B4F',
     '작은도서관': '#D9A441',
@@ -127,7 +121,7 @@
         fillOpacity: 0.9
       });
       var popupHtml =
-        '<div class="popup-name">' + KIND_EMOJI[f.kind] + ' ' + esc(f.name) + '</div>' +
+        '<div class="popup-name">' + esc(f.name) + '</div>' +
         '<div class="popup-meta">' + esc(f.region) + ' ' + esc(f.district) + ' · ' + esc(f.kind) + '</div>' +
         '<button class="popup-btn" data-popup-detail="' + f.id + '">자세히 보기</button>';
       marker.bindPopup(popupHtml);
@@ -165,19 +159,19 @@
     ];
     if (f.satOpen) tags.push('<span class="tag free">토요일 운영</span>');
     var info = [];
-    if (f.hoursWeek) info.push('<div class="card-info"><span class="ico">⏰</span>평일 ' + esc(f.hoursWeek) + '</div>');
-    if (f.seats) info.push('<div class="card-info"><span class="ico">💺</span>좌석 ' + f.seats.toLocaleString() + '석</div>');
-    info.push('<div class="card-info"><span class="ico">🚫</span>' + esc(f.closed ? '휴관: ' + f.closed : '휴관 정보 없음') + '</div>');
+    if (f.hoursWeek) info.push('<div class="card-info">평일 ' + esc(f.hoursWeek) + '</div>');
+    if (f.seats) info.push('<div class="card-info">좌석 ' + f.seats.toLocaleString() + '석</div>');
+    info.push('<div class="card-info">' + esc(f.closed ? '휴관: ' + f.closed : '휴관 정보 없음') + '</div>');
     return (
-      '<article class="facility-card" data-id="' + f.id + '" style="--cc1:' + kindColor(f.kind) + '33; --cc2:#FFFFFF">' +
-        '<div class="card-emoji">' + KIND_EMOJI[f.kind] +
-          '<button class="fav-btn" data-fav="' + f.id + '" aria-label="찜">' + (fav ? '❤️' : '🤍') + '</button>' +
-        '</div>' +
+      '<article class="facility-card" data-id="' + f.id + '">' +
         '<div class="card-body">' +
-          '<h3 class="card-name">' + esc(f.name) + '</h3>' +
+          '<div class="card-title-row">' +
+            '<h3 class="card-name">' + esc(f.name) + '</h3>' +
+            '<button class="fav-btn" data-fav="' + f.id + '" aria-label="찜">' + (fav ? '❤️' : '🤍') + '</button>' +
+          '</div>' +
           '<div class="card-tags">' + tags.join('') + '</div>' +
           info.join('') +
-          '<button class="card-locate" data-locate="' + f.id + '">📍 위치보기</button>' +
+          '<button class="card-locate" data-locate="' + f.id + '">위치보기</button>' +
         '</div>' +
       '</article>'
     );
@@ -207,30 +201,29 @@
       encodeURIComponent((REGION_FULL[f.region] || f.region) + ' ' + f.district + ' ' + f.name);
     var body = document.getElementById('modalBody');
     body.innerHTML =
-      '<div class="modal-emoji">' + KIND_EMOJI[f.kind] + '</div>' +
       '<h2 class="modal-title">' + esc(f.name) + '</h2>' +
       '<div class="modal-tags">' +
         '<span class="tag district" style="background:' + rc + '">' + esc(f.region) + (f.district ? ' ' + esc(f.district) : '') + '</span>' +
-        '<span class="tag type-' + esc(f.kind) + '">' + KIND_EMOJI[f.kind] + ' ' + esc(f.kind) + '</span>' +
+        '<span class="tag type-' + esc(f.kind) + '">' + esc(f.kind) + '</span>' +
         (f.satOpen ? '<span class="tag free">토요일 운영</span>' : '') +
         (f.holOpen ? '<span class="tag free">공휴일 운영</span>' : '') +
       '</div>' +
       '<div class="detail-list">' +
-        detailRow('📍 주소', f.address) +
-        detailRow('⏰ 평일 이용', f.hoursWeek) +
-        detailRow('🗓️ 토요일 이용', f.hoursSat) +
-        detailRow('🎌 공휴일 이용', f.hoursHol) +
-        detailRow('🚫 휴관일', f.closed) +
-        detailRow('💺 열람좌석', f.seats ? f.seats.toLocaleString() + '석' : '') +
-        detailRow('📗 장서 수', f.books ? f.books.toLocaleString() + '권' : '') +
-        detailRow('🔁 대출가능', f.loanCount ? f.loanCount + '권 · ' + f.loanDays + '일' : '') +
-        detailRow('📞 전화', f.phone) +
-        detailRow('🏢 운영기관', f.operOrg) +
-        detailRow('📆 자료 기준일', f.refDate) +
+        detailRow('주소', f.address) +
+        detailRow('평일 이용', f.hoursWeek) +
+        detailRow('토요일 이용', f.hoursSat) +
+        detailRow('공휴일 이용', f.hoursHol) +
+        detailRow('휴관일', f.closed) +
+        detailRow('열람좌석', f.seats ? f.seats.toLocaleString() + '석' : '') +
+        detailRow('장서 수', f.books ? f.books.toLocaleString() + '권' : '') +
+        detailRow('대출가능', f.loanCount ? f.loanCount + '권 · ' + f.loanDays + '일' : '') +
+        detailRow('전화', f.phone) +
+        detailRow('운영기관', f.operOrg) +
+        detailRow('자료 기준일', f.refDate) +
       '</div>' +
       '<div class="modal-links">' +
-        '<a class="link-btn map" href="' + naverUrl + '" target="_blank" rel="noopener">🧭 네이버 길찾기</a>' +
-        (safeUrl(f.homepage) ? '<a class="link-btn web" href="' + esc(safeUrl(f.homepage)) + '" target="_blank" rel="noopener">🏠 홈페이지</a>' : '') +
+        '<a class="link-btn map" href="' + naverUrl + '" target="_blank" rel="noopener">네이버 길찾기</a>' +
+        (safeUrl(f.homepage) ? '<a class="link-btn web" href="' + esc(safeUrl(f.homepage)) + '" target="_blank" rel="noopener">홈페이지</a>' : '') +
         '<button class="link-btn fav" data-fav="' + f.id + '">' + (fav ? '❤️ 찜 해제' : '🤍 찜하기') + '</button>' +
       '</div>';
     document.getElementById('modalOverlay').hidden = false;

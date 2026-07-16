@@ -5,12 +5,6 @@
   var LIBRARIES = window.LIBRARIES || [];
   var DATA_META = window.DATA_META || {};
 
-  var KIND_EMOJI = {
-    '공공도서관': '📚',
-    '작은도서관': '🧸',
-    '어린이도서관': '🎈',
-    '기타': '📖'
-  };
   var KIND_ORDER = ['공공도서관', '작은도서관', '어린이도서관', '기타'];
   var REGION_ORDER = ['서울', '부산', '대구', '인천', '광주', '대전', '울산', '세종',
     '경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주'];
@@ -56,7 +50,7 @@
   document.getElementById('kindChips').innerHTML = KIND_ORDER
     .filter(function (k) { return kindCounts[k]; })
     .map(function (k) {
-      return '<span class="status-chip"><span class="tag">' + KIND_EMOJI[k] + ' ' + esc(k) + '</span>' +
+      return '<span class="status-chip"><span class="tag">' + esc(k) + '</span>' +
         '<span class="chip-num">' + kindCounts[k] + '곳</span></span>';
     }).join('');
 
