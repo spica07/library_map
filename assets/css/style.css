@@ -39,7 +39,6 @@ body {
   -webkit-text-fill-color: transparent;
   text-shadow: none;
 }
-.app-subtitle { margin-top: 8px; font-size: 1.1rem; color: var(--brown); }
 .top-notice {
   display: inline-block; text-align: center;
   margin: 10px auto 0; padding: 6px 16px;
@@ -204,7 +203,8 @@ body {
 .result-count { font-size: 0.95rem; color: var(--brown); }
 
 /* ---------- 뷰 전환 ---------- */
-.view-toggle { display: none; justify-content: center; gap: 8px; margin-bottom: 14px; }
+.view-toggle { display: none; gap: 6px; }
+.pill-sm { padding: 6px 12px; font-size: 0.82rem; }
 
 /* ---------- 지도 + 목록 ---------- */
 .content-grid {
@@ -363,7 +363,11 @@ body {
 
 /* ---------- 반응형 ---------- */
 @media (max-width: 900px) {
-  .app-title { font-size: 1.7rem; }
+  .app-header { padding: 14px 16px 10px; }
+  .app-title { font-size: 1.5rem; }
+  .top-notice { margin: 6px auto 0; padding: 4px 12px; font-size: 0.74rem; }
+  .panel { padding: 12px 14px; margin-bottom: 10px; }
+  .result-count-row { margin-top: 6px; }
   .view-toggle { display: flex; }
   .content-grid { grid-template-columns: 1fr; }
   .map-pane { position: relative; top: auto; }
