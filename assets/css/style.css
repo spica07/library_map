@@ -297,6 +297,7 @@ body {
   transition: transform 0.2s;
 }
 .load-more-btn:hover { transform: translateY(-2px); }
+.load-more-btn[hidden] { display: none; }
 
 /* ---------- 빈 상태 ---------- */
 .empty-state { text-align: center; padding: 60px 0; color: var(--brown); }
