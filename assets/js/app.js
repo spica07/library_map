@@ -494,7 +494,9 @@
     state.q = ''; state.region = ''; state.kind = '';
     state.satOpen = false; state.holOpen = false; state.favOnly = false;
     document.getElementById('searchInput').value = '';
-    document.querySelectorAll('.filter-bar .pill').forEach(function (p) {
+    // 필터 칩만 훑는다 — .filter-bar 전체를 훑으면 같은 패널에 있는
+    // 지도/목록 전환 버튼까지 active 가 벗겨진다
+    document.querySelectorAll('.filter-groups .pill').forEach(function (p) {
       p.classList.toggle('active',
         p.getAttribute('data-region') === '' ||
         p.getAttribute('data-kind') === '');
