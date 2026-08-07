@@ -194,6 +194,7 @@
   function cardHtml(f) {
     var fav = favorites.has(f.id);
     var tags = [
+      nearby.tag(f),
       '<span class="tag district">' + esc(f.region) + (f.district ? ' ' + esc(f.district) : '') + '</span>',
       '<span class="tag type-' + esc(f.kind) + '">' + esc(f.kind) + '</span>'
     ];
@@ -257,6 +258,7 @@
         (f.holOpen ? '<span class="tag free">공휴일 운영</span>' : '') +
       '</div>' +
       '<div class="detail-list">' +
+        detailRow('내 위치에서', nearby.text(f)) +
         detailRow('주소', f.address) +
         detailRow('평일 이용', f.hoursWeek) +
         detailRow('토요일 이용', f.hoursSat) +
@@ -285,13 +287,42 @@
 
   /* ---------- 렌더 파이프라인 ---------- */
   function render() {
-    currentList = LIBRARIES.filter(matches);
-    state.renderedCount = PAGE_SIZE;
+    currentList = nearby.sort(LIBRARIES.filter(matches));
+    /* 내 주변은 이미 상한만큼 잘려 있다 — 거기에 "더 보기"까지
+       붙이면 두 번 자르는 셈이라 한 번에 다 보여준다. */
+    state.renderedCount = nearby.active() ? nearby.limit : PAGE_SIZE;
     renderMarkers(currentList);
     renderCards(currentList);
-    document.getElementById('resultCount').textContent =
-      '총 ' + currentList.length + '곳' + (currentList.length < LIBRARIES.length ? ' (전체 ' + LIBRARIES.length + '곳 중)' : '');
+    document.getElementById('resultCount').textContent = nearby.active()
+      ? '가까운 ' + currentList.length + '곳'
+      : '총 ' + currentList.length + '곳' + (currentList.length < LIBRARIES.length ? ' (전체 ' + LIBRARIES.length + '곳 중)' : '');
   }
+
+  /* ---------- 내 주변 ----------
+     권한 요청·거리 계산·내 위치 마커는 geo.js 가 맡는다. 이 앱이 알려줄 것은
+     좌표를 꺼내는 법과, 지역 필터를 어떻게 푸는지뿐이다. */
+
+  /* 지역 필터만 조용히 푼다 — setRegion/setDistrict 는 지도를 날리고 render
+     까지 부르므로 켜는 길목에서 쓰면 화면이 두 번 튄다. */
+  function clearRegion() {
+    state.region = '';
+    state.district = '';
+    document.getElementById('districtSelect').value = '';
+    document.querySelectorAll('#regionFilters .pill').forEach(function (p) {
+      p.classList.toggle('active', p.getAttribute('data-region') === '');
+    });
+  }
+
+  var nearby = window.createNearby({
+    map: map,
+    button: document.getElementById('nearbyBtn'),
+    label: document.getElementById('nearbyLabel'),
+    notice: document.getElementById('nearbyNotice'),
+    unitLabel: '도서관',
+    latLngOf: function (f) { return [f.lat, f.lng]; },
+    onClear: clearRegion,
+    onChange: render
+  });
 
   /* ---------- 초기 UI 구성 ---------- */
   function buildFilterPills() {
@@ -345,6 +376,7 @@
 
   /* ---------- 이벤트 ---------- */
   function setDistrict(key) {
+    nearby.off();
     state.district = key;
     document.getElementById('districtSelect').value = key;
     if (key) {
@@ -364,6 +396,7 @@
   }
 
   function setRegion(r) {
+    nearby.off();   /* 지역을 고르는 건 내 주변을 그만두겠다는 뜻이다 */
     state.region = r;
     // 다른 지역의 시군구가 선택돼 있으면 해제
     if (state.district && r && state.district.split('|')[0] !== r) {
